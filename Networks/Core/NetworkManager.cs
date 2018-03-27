@@ -19,5 +19,7 @@ public static class NetworkManager
         protocol.AddInfo<string>("HeartBeat");
         return protocol;
     }
+
+    
 }
 

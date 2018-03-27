@@ -43,7 +43,7 @@ public class Connection
     public NetworkStatus status = NetworkStatus.Disconnected;
 
     //消息分发
-    public MessageDistribution _msgDistri = new MessageDistribution();
+    public MessageDistribution _msgDistri = MessageDistribution.GetInstance();
 
 
     public Connection()
@@ -104,11 +104,12 @@ public class Connection
         Debug.Log("收到消息:" + proto.Expression);
 #endif
 
+
         //消息处理
         lock (_msgDistri.ProtoList)
         {
             _msgDistri.ProtoList.Add(proto);
-        }
+        }        
 
         //清除已处理消息
         int count = BufferCount - sizeof(Int32) - lenMsg;

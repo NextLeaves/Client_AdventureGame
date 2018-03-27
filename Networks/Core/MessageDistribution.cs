@@ -6,18 +6,32 @@ using UnityEngine;
 
 public class MessageDistribution
 {
+    private static MessageDistribution _instance = new MessageDistribution();
+
     public int Efficiency { get; set; }
     public List<ProtocolBase> ProtoList { get; set; }
 
     private Dictionary<string, Action<ProtocolBase>> eventDict;
     private Dictionary<string, Action<ProtocolBase>> onceDict;
 
-    public MessageDistribution()
+    private MessageDistribution()
     {
         Efficiency = 15;
         ProtoList = new List<ProtocolBase>();
         eventDict = new Dictionary<string, Action<ProtocolBase>>();
         onceDict = new Dictionary<string, Action<ProtocolBase>>();
+    }
+
+    public static MessageDistribution GetInstance()
+    {
+        if (_instance == null)
+        {
+            lock (_instance)
+            {
+                return _instance ?? new MessageDistribution();
+            }
+        }
+        return _instance;
     }
 
     public void SolveMessage()
@@ -82,7 +96,7 @@ public class MessageDistribution
         }
     }
 
-    public void DeleteOnceListener(string name,Action<ProtocolBase> protoMethod)
+    public void DeleteOnceListener(string name, Action<ProtocolBase> protoMethod)
     {
         if (onceDict.ContainsKey(name))
         {

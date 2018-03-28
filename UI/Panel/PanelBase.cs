@@ -39,22 +39,22 @@ namespace Assets.Scripts.UI.Panel
 
         public virtual void OnClosed()
         {
-            //throw new System.NotImplementedException();
+            this.Skin.GetComponent<Animator>().SetTrigger("Zoom_close");            
         }
 
         public virtual void OnClosing()
-        {
+        {            
             //throw new System.NotImplementedException();
         }
 
         public virtual void OnShowed()
-        {
+        {            
             //throw new System.NotImplementedException();
         }
 
         public virtual void OnShowing()
         {
-            //throw new System.NotImplementedException();
+            this.Skin.GetComponent<Animator>().SetTrigger("Zoom_show");
         }
     }
 }

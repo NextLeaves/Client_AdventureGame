@@ -20,7 +20,11 @@ public class MainInterface : MonoBehaviour
 
     private void OnExitGame()
     {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
         Application.Quit();
+#endif
     }
 
     private void OnMakeClub()

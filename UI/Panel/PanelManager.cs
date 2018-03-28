@@ -63,6 +63,7 @@ namespace Assets.Scripts.UI.Panel
             panel.OnClosing();
             panels.Remove(name);
             panel.OnClosed();
+
             GameObject.Destroy(panel.Skin);
             Component.Destroy(panel as PanelBase);
         }

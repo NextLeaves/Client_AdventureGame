@@ -46,7 +46,7 @@ namespace Assets.Scripts.UI.Panel
             login_btn.onClick.AddListener(OnLoginClick);
             register_btn.onClick.AddListener(OnRegisterClick);
             findout_btn.onClick.AddListener(OnFindoutClick);
-            checkProto_btn.onClick.AddListener(OnOpenProtocolClick);            
+            checkProto_btn.onClick.AddListener(OnOpenProtocolClick);
         }
 
 
@@ -77,27 +77,41 @@ namespace Assets.Scripts.UI.Panel
             string num = proto.GetString(1);
             if (num == "1")
             {
-                Debug.Log("登录成功--game start");
+                Debug.Log("登录成功--game start");                
             }
             else
             {
                 Debug.Log("登录失败--password is error");
+                object[] obj = new object[2];
+                obj[0] = "错误提示";
+                obj[1] = "账号或密码错误，请检查信息后，再进行操作。";
+                PanelManager._instance.OpenPanel<MentionPanel>("", obj);
             }
         }
 
         private void OnRegisterClick()
         {
             Debug.Log("OnRegisterClick");
+
+            base.Close();
+            PanelManager._instance.OpenPanel<RegisterPanel>("", null);
+
         }
 
         private void OnFindoutClick()
         {
             Debug.Log("OnFindoutClick");
+            base.Close();
+            PanelManager._instance.OpenPanel<FindoutPanel>("", null);
         }
 
         private void OnOpenProtocolClick()
         {
-            Debug.Log("OnOpenProtocolClick");
+            Debug.Log("OnOpenProtocolClick");            
+            object[] obj = new object[2];
+            obj[0] = "游戏协议";
+            obj[1] = "在适用法律允许的最大范围内       INUStudio保留对本协议的最终解释权  用户如对本协议有任何疑问   请登陆INUStudio或官方网站获取信息";
+            PanelManager._instance.OpenPanel<MentionPanel>("", obj);
         }
 
     }

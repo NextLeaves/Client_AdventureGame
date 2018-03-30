@@ -1,6 +1,9 @@
-﻿using System;
+﻿#define NETWORK
+
+using System;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts.UI.Panel
 {
@@ -52,6 +55,7 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnLoginClick()
         {
+#if NETWORK
             if (string.IsNullOrEmpty(acc_field.text) || string.IsNullOrEmpty(pw_field.text))
             {
                 Debug.Log("[Warn] input nothing.");
@@ -59,8 +63,8 @@ namespace Assets.Scripts.UI.Panel
             }
 
             if (NetworkManager.ConnClient.status != NetworkStatus.Connected)
-            {
-                string host = "127.0.0.1";
+            {                
+                string host = Root.IP;
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }
@@ -69,6 +73,13 @@ namespace Assets.Scripts.UI.Panel
             proto.AddInfo<string>(acc_field.text);
             proto.AddInfo<string>(pw_field.text);
             NetworkManager.ConnClient.Send(proto);
+#elif DEBUG
+            Debug.Log("登录成功--game start");
+            base.Close();
+            object[] objs = new object[1];
+            objs[0] = 1;
+            PanelManager._instance.OpenPanel<LoadingPanel>("", objs);
+#endif
         }
 
         private void OnLoginBack(ProtocolBase protocol)
@@ -77,7 +88,12 @@ namespace Assets.Scripts.UI.Panel
             string num = proto.GetString(1);
             if (num == "1")
             {
-                Debug.Log("登录成功--game start");                
+                Debug.Log("登录成功--game start");
+                Root.Account = acc_field.text;
+                base.Close();
+                object[] objs = new object[1];
+                objs[0] = 1;
+                PanelManager._instance.OpenPanel<LoadingPanel>("", objs);
             }
             else
             {
@@ -107,7 +123,7 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnOpenProtocolClick()
         {
-            Debug.Log("OnOpenProtocolClick");            
+            Debug.Log("OnOpenProtocolClick");
             object[] obj = new object[2];
             obj[0] = "游戏协议";
             obj[1] = "在适用法律允许的最大范围内       INUStudio保留对本协议的最终解释权  用户如对本协议有任何疑问   请登陆INUStudio或官方网站获取信息";

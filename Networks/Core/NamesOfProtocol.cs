@@ -9,5 +9,7 @@ public static class NamesOfProtocol
     public const string Logout = "Logout";
     public const string FindPassword = "FindPassword";
     public const string ChangePassword = "ChangePassword";
+    public const string ReadPlayerData = "ReadPlayerData";
+    public const string CreatePlayer = "CreatePlayer";
 }
 

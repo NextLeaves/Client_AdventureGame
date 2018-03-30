@@ -57,7 +57,7 @@ namespace Assets.Scripts.UI.Panel
 
             if (NetworkManager.ConnClient.status != NetworkStatus.Connected)
             {
-                string host = "127.0.0.1";
+                string host = Root.IP;
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }

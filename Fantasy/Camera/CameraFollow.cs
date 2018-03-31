@@ -26,11 +26,11 @@ public class CameraFollow : MonoBehaviour
 
     private bool isFace = false;
 
-
+    public Transform[] transPos;    
+    private int order = 0;
 
     void Start()
     {
-
     }
 
     void Update()
@@ -43,24 +43,36 @@ public class CameraFollow : MonoBehaviour
     void LookAtTarget()
     {
         if (target == null) return;
-        if (Input.GetKeyDown(KeyCode.V)) isFace = !isFace;
-
-        if (isFace)
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            float horValue = Input.GetAxis("Mouse X");
-            pos = target.GetChild(2).GetComponent<Transform>().position;
-        }
-        else
-        {
-            pos = target.transform.position + Vector3.up * Distance_up - Distance_forward * target.forward;
+            if (order > 2) order = -1;
+            order++;
         }
 
+        switch (order)
+        {
+            case 0:
+                smooth = 0.8f;
+                break;
+            case 1:
+                Distance_forward = 2.5f;
+                Distance_up = 1.2f;
+                smooth = 1.5f;
+                break;
+            case 2:
+                Distance_forward = -2.5f;
+                Distance_up = 1.2f;
+                smooth = 0.8f;
+                break;
+        }
+        pos = target.transform.position + Vector3.up * Distance_up - Distance_forward * target.forward;
         this.transform.position = Vector3.Lerp(this.transform.position, pos, smooth * Time.deltaTime);
         transform.LookAt(target);
     }
 
     void Zoom()
     {
+        if (order == 2) return;
         float scollValue = Input.GetAxis("Mouse ScrollWheel");
         Distance_forward -= scollValue;
         Distance_up -= scollValue;

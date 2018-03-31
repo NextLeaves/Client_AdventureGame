@@ -15,6 +15,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Fantasy;
+using Assets.Scripts.Fantasy.Props;
 
 public class PlayerTechology : MonoBehaviour
 {
@@ -41,6 +42,7 @@ public class PlayerTechology : MonoBehaviour
         {
             if (hit.collider.gameObject.tag == Tag.Prop)
             {
+                hit.collider.gameObject.GetComponent<Prop>().AddScore();
                 Destroy(hit.collider.gameObject);
             }
         }

@@ -1,4 +1,4 @@
-﻿#define NETWORK
+﻿#define DEBUG
 
 using System;
 using UnityEngine.UI;

@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Assets.Scripts.Fantasy.ObjectClass;
+using Assets.Scripts.Fantasy;
 
 namespace Assets.Scripts.Fantasy.Props
 {
@@ -30,7 +31,7 @@ namespace Assets.Scripts.Fantasy.Props
 
     public class Prop : MonoBehaviour
     {
-        private MyPlayer playerData = MyPlayer.GetInstance();
+        private MyPlayer playerData = Networks.DataManager.GetInstance().playerData;
 
         public PropCategory _category = PropCategory.None;
         [Range(1, 10)]

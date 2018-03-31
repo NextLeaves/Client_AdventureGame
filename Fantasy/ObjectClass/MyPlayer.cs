@@ -11,36 +11,46 @@
 
 */
 
-using Assets.Scripts.Fantasy.Networks;
+
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Fantasy.ObjectClass
 {
-    [Serializable]
-    public class MyPlayer
-    {
-        public static MyPlayer _instance = new MyPlayer();
 
+    [Serializable]
+    public class MyPlayer 
+    {
         public int Coin { get; set; }
         public int Money { get; set; }
         public int Star { get; set; }
         public int Diamand { get; set; }
 
-        private MyPlayer()
+        public MyPlayer() : this(100, 100, 100, 100)
         {
-            Coin = 100;
-            Money = 100;
-            Star = 100;
-            Diamand = 100;
+
         }
 
-        public static MyPlayer GetInstance()
+        public MyPlayer(int coin, int money, int star) : this(coin, money, star, 100)
         {
-            return _instance;
-        }        
 
+        }
+
+        public MyPlayer(int coin, int money, int star, int diamand)
+        {
+            Coin = coin;
+            Money = money;
+            Star = star;
+            Diamand = diamand;
+        }
+
+        public void Init(int coin, int money, int star, int diamand)
+        {
+            Coin = coin;
+            Money = money;
+            Star = star;
+            Diamand = diamand;
+        }
 
     }
 }

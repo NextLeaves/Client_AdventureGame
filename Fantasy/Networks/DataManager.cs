@@ -9,71 +9,58 @@ namespace Assets.Scripts.Fantasy.Networks
 {
     public class DataManager
     {
-        private static DataManager _instance = new DataManager();
-        private MyPlayer playerData = MyPlayer.GetInstance();
+        public MyPlayer playerData = new MyPlayer();
 
+        private static DataManager _instance = new DataManager();
 
         public static DataManager GetInstance()
         {
             return _instance;
         }
 
-        public bool ReadPlayerData()
+        /// <summary>
+        /// 对文件读取的方式：
+        /// 1. unity中生成对象
+        /// 2. 针对不同的数据，修改对象的值（而不是直接引用复制）
+        /// </summary>
+        /// <returns></returns>
+        public bool ReadLocalFile()
         {
-            IFormatter formatter = new BinaryFormatter();
-            Stream stream;
-            try
+            string dirPath = Application.dataPath + "/Data";
+            string filePath = dirPath + "/sdata.dat";
+            if (!Directory.Exists(dirPath) || !File.Exists(filePath))
             {
-                Debug.Log("Read Data is processing...");
-                string dirPath = Application.dataPath + "/LocalData";
-                string filePath = dirPath + "/local.dat";
-                if (!File.Exists(filePath))
-                {
-                    Debug.Log("Read Data is error.");
-                    return false;
-                }
-                stream = new FileStream(filePath, FileMode.Open);
-                MyPlayer localPlayer = formatter.Deserialize(stream) as MyPlayer;
-                if (localPlayer == null)
-                {
-                    Debug.Log("Read Data is error.");
-                    throw new IOException("localData is bad.");
-                }
-
-                MyPlayer._instance = localPlayer;
-                Debug.Log("Read Data is successful.");
+                playerData = new MyPlayer();
+                return false;
+            }
+            IFormatter bf = new BinaryFormatter();
+            using (Stream fs = new FileStream(filePath, FileMode.Open))
+            {
+                fs.Position = 0;
+                MyPlayer data_seria = bf.Deserialize(fs) as MyPlayer;
+                playerData.Init(data_seria.Coin, data_seria.Money, data_seria.Star, data_seria.Diamand);
                 return true;
-            }
-            catch (IOException ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Debug.Log("Read Data is error.");
-                return false;
             }
         }
 
-        public void SavePlayerData()
+        public void WriteLocalFile()
         {
-            string dirPath = Application.dataPath + "/LocalData";
-            string filePath = dirPath + "/local.dat";
+            string dirPath = Application.dataPath + "/Data";
+            string filePath = dirPath + "/sdata.dat";
             if (!Directory.Exists(dirPath)) Directory.CreateDirectory(dirPath);
-
             IFormatter bf = new BinaryFormatter();
-            Stream fs = new FileStream(filePath, FileMode.OpenOrCreate);
-
+            Stream fs = new FileStream(filePath, FileMode.Truncate);
             try
             {
                 bf.Serialize(fs, playerData);
-                fs.Close();
             }
             catch (IOException ex)
             {
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                fs.Close();
             }
         }
 

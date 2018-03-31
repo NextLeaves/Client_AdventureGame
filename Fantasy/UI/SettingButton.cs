@@ -76,17 +76,17 @@ namespace Assets.Scripts.Fantasy.UI
 
         void OpenCMusicClick()
         {
-            Networks.DataManager.GetInstance().ReadPlayerData();
+            
         }
 
         void QuitGame()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
-            Networks.DataManager.GetInstance().SavePlayerData();
+            Networks.DataManager.GetInstance().WriteLocalFile();
 #else
             Application.Quit(); 
-            Networks.DataManager.GetInstance().SavePlayerData();
+            Networks.DataManager.GetInstance().WriteLocalFile();
 #endif
         }
     }

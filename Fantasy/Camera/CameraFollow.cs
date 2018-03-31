@@ -22,9 +22,7 @@ public class CameraFollow : MonoBehaviour
     public float Distance_forward;
     public float Distance_up;
     private Vector3 pos = Vector3.zero;
-    public float smooth = 0.8f;
-
-    private bool isFace = false;
+    public float smooth = 0.8f;    
 
     public Transform[] transPos;    
     private int order = 0;

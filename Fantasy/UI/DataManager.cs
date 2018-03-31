@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Assets.Scripts.Fantasy.ObjectClass;
+using Assets.Scripts.Fantasy;
 
 namespace Assets.Scripts.Fantasy.UI
 {
@@ -15,7 +16,7 @@ namespace Assets.Scripts.Fantasy.UI
         private Text money_txt;
         private Text coin_txt;
 
-        private MyPlayer playerData = MyPlayer.GetInstance();
+        private MyPlayer playerData = Networks.DataManager.GetInstance().playerData;
 
         private void Awake()
         {
@@ -50,6 +51,7 @@ namespace Assets.Scripts.Fantasy.UI
                 money_txt.text = playerData.Money.ToString();
                 coin_txt.text = playerData.Coin.ToString();
             }
+                    
         }
 
         

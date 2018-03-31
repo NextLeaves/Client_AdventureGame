@@ -30,6 +30,7 @@ namespace Assets.Scripts.Fantasy.Networks
         {
             _msgDistri.AddOnceListenner(NamesOfProtocol.ReadPlayerData, OnReadPlayerDataBack);
             _msgDistri.AddOnceListenner(NamesOfProtocol.CreatePlayer, OnCreatePlayerDataBack);
+            Networks.DataManager.GetInstance().ReadLocalFile();
             StartCoroutine(GetPlayerData());
         }
 
@@ -106,13 +107,7 @@ namespace Assets.Scripts.Fantasy.Networks
                 obj[0] = "错误提示";
                 obj[1] = "初始化数据失败，请重新登录！";
                 PanelManager._instance.OpenPanel<MentionPanel>("", obj);
-
-
-
                 SceneManager.LoadScene(0);
-
-
-
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿#define DEBUG
+﻿#define NETWORK
 
 using System.Collections;
 using System.Collections.Generic;

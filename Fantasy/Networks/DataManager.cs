@@ -64,5 +64,17 @@ namespace Assets.Scripts.Fantasy.Networks
             }
         }
 
+        public byte[] WriteRemoteFile()
+        {
+            using(Stream ms=new MemoryStream())
+            {
+                IFormatter bf = new BinaryFormatter();
+                bf.Serialize(ms, playerData);
+                byte[] ds = new byte[ms.Length];
+                ms.Write(ds, 0, ds.Length);
+                return ds;
+            }
+        }
+
     }
 }

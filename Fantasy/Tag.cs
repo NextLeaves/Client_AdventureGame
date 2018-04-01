@@ -8,5 +8,6 @@ namespace Assets.Scripts.Fantasy
     public class Tag
     {
         public const string Prop = "Props";
+        public const string Player = "Player";
     }
 }

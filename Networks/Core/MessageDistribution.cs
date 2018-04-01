@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define DEBUG
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,8 +59,7 @@ public class MessageDistribution
     {
         string name = protocol.Name;
 #if DEBUG
-        Debug.Log("分发处理消息");
-        Debug.Log(protocol.Name);
+        Debug.Log("分发处理消息" + protocol.Name);        
 #endif
         if (eventDict.ContainsKey(name))
             eventDict[name](protocol);

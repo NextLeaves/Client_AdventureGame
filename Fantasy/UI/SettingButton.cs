@@ -15,6 +15,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+using Assets.Scripts.UI.Panel;
+
 namespace Assets.Scripts.Fantasy.UI
 {
     public class SettingButton : MonoBehaviour
@@ -41,7 +43,7 @@ namespace Assets.Scripts.Fantasy.UI
             if (settingPanel.activeSelf) settingPanel.SetActive(!settingPanel.activeSelf);
             setting_btn.onClick.AddListener(OpenSettingPanel);
 
-
+            info_btn.onClick.AddListener(OpenInfoClick);
             music_btn.onClick.AddListener(OpenMusicClick);
             cmusic_btn.onClick.AddListener(OpenCMusicClick);
             quit_btn.onClick.AddListener(QuitGame);
@@ -54,6 +56,10 @@ namespace Assets.Scripts.Fantasy.UI
 
         void OpenInfoClick()
         {
+            object[] obj = new object[2];
+            obj[0] = "操作提示";
+            obj[1] = "【T】动物旁，坐骑；【shift】加速；【V】切换视角";
+            PanelManager._instance.OpenPanel<MentionPanel>("", obj);
 
             OpenSettingPanel();
         }

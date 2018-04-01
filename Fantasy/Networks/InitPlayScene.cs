@@ -11,13 +11,19 @@
 
 */
 
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 using Assets.Scripts.UI.Panel;
-
+using Assets.Scripts.Fantasy.ObjectClass;
+using Assets.Scripts.Fantasy.Networks;
+using System.Text;
 
 namespace Assets.Scripts.Fantasy.Networks
 {
@@ -28,10 +34,10 @@ namespace Assets.Scripts.Fantasy.Networks
 
         void Start()
         {
-            _msgDistri.AddOnceListenner(NamesOfProtocol.ReadPlayerData, OnReadPlayerDataBack);
-            _msgDistri.AddOnceListenner(NamesOfProtocol.CreatePlayer, OnCreatePlayerDataBack);
+            _msgDistri.AddOnceListenner(NamesOfProtocol.ReceivePlayerData, OnReceivePlayerDataBack);
+            _msgDistri.AddOnceListenner(NamesOfProtocol.SendPlayerData, OnSendPlayerDataBack);
             Networks.DataManager.GetInstance().ReadLocalFile();
-            StartCoroutine(GetPlayerData());
+            StartCoroutine(ReceivePlayerData());
         }
 
         void Update()
@@ -39,7 +45,7 @@ namespace Assets.Scripts.Fantasy.Networks
 
         }
 
-        IEnumerator GetPlayerData()
+        IEnumerator ReceivePlayerData()
         {
             yield return null;
 
@@ -52,12 +58,12 @@ namespace Assets.Scripts.Fantasy.Networks
             }
             ProtocolByte proto = new ProtocolByte();
             proto.Expression = "";
-            proto.AddInfo<string>(NamesOfProtocol.ReadPlayerData);
+            proto.AddInfo<string>(NamesOfProtocol.ReceivePlayerData);
             proto.AddInfo<string>(Root.Account);
             NetworkManager.ConnClient.Send(proto);
         }
 
-        IEnumerator CreatePlayerData()
+        IEnumerator SendPlayerData()
         {
             yield return null;
 
@@ -69,36 +75,44 @@ namespace Assets.Scripts.Fantasy.Networks
                 NetworkManager.ConnClient.Connect(host, port);
             }
             ProtocolByte proto = new ProtocolByte();
-            proto.AddInfo<string>(NamesOfProtocol.CreatePlayer);
+            proto.AddInfo<string>(NamesOfProtocol.SendPlayerData);
             proto.AddInfo<string>(Root.Account);
+            proto.AddInfo<string>(Encoding.Default.GetString(DataManager.GetInstance().WriteRemoteFile()));
+
             NetworkManager.ConnClient.Send(proto);
         }
 
-        void OnReadPlayerDataBack(ProtocolBase protocol)
+        void OnReceivePlayerDataBack(ProtocolBase protocol)
         {
             ProtocolByte proto = protocol as ProtocolByte;
-            string score = proto.GetString(1);
-            if (score == "-1")
+            string number = proto.GetString(1);
+            if (number !="-1")
             {
-                Debug.Log("未获取数据--正在初始化");
-                StartCoroutine(CreatePlayerData());
+                //初始化客户端的游戏数据
+                byte[] data = Encoding.Default.GetBytes(proto.GetString(1));
+                using (Stream ms = new MemoryStream(data))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+                    MyPlayer temp_Player = bf.Deserialize(ms) as MyPlayer;
+                    DataManager.GetInstance().playerData.Init(temp_Player.Coin, temp_Player.Money, temp_Player.Star, temp_Player.Diamand);
+                }
+                Debug.Log("数据获取成功");
             }
             else
-            {
-                Debug.Log("数据获取成功");
-                //初始化客户端的游戏数据
-                print(score);
+            {                
+                Debug.Log("未获取数据--正在初始化");
+                StartCoroutine(SendPlayerData());
             }
         }
 
-        void OnCreatePlayerDataBack(ProtocolBase protocol)
+        void OnSendPlayerDataBack(ProtocolBase protocol)
         {
             ProtocolByte proto = protocol as ProtocolByte;
             string num = proto.GetString(1);
             if (num == "1")
             {
                 Debug.Log("init data successful.");
-                StartCoroutine(GetPlayerData());
+                StartCoroutine(ReceivePlayerData());
             }
             else
             {

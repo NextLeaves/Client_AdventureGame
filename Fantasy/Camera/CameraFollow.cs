@@ -31,18 +31,25 @@ namespace Assets.Scripts.Fantasy
 
         void Start()
         {
+            StartCoroutine(GetPlayerPos());
         }
 
         void Update()
         {
-
+            if (target == null) return;
             LookAtTarget();
             Zoom();
         }
 
+        IEnumerator GetPlayerPos()
+        {
+            yield return new WaitForSeconds(1.0f);
+
+            target = GameObject.FindWithTag(Tag.Player).GetComponent<Transform>();
+        }
+
         void LookAtTarget()
         {
-            if (target == null) return;
             if (Input.GetKeyDown(KeyCode.V))
             {
                 if (order > 2) order = -1;

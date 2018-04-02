@@ -11,5 +11,7 @@ public static class NamesOfProtocol
     public const string ChangePassword = "ChangePassword";
     public const string ReceivePlayerData = "ReceivePlayerData";
     public const string SendPlayerData = "SendPlayerData";
+    public const string SendOriginPos = "SendOriginPos";
+    public const string UpdatePosition = "UpdatePosition";
 }
 

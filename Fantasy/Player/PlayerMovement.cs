@@ -24,7 +24,7 @@ public class PlayerMovement : MonoBehaviour
     private float _speed = 100.0f;
     public float _speedMax = 300.0f;
     public float _speedSimple = 100.0f;
-    public Slider ennergy_slider;
+    private Slider ennergy_slider;
     private float ennergyRateUp = 0.01f;
     private float ennergyRateDown = 0.02f;
 
@@ -50,6 +50,8 @@ public class PlayerMovement : MonoBehaviour
             cc = GetComponent<CharacterController>();
         if (anim == null)
             anim = GetComponent<Animator>();
+        if (ennergy_slider == null)
+            ennergy_slider = GameObject.Find("Canvas/InfoPanels/PlayerInfoPanel/energe_slider").GetComponent<Slider>();
     }
 
     void Update()

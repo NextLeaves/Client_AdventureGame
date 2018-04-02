@@ -87,13 +87,11 @@ public class MessageDistribution
             onceDict[name] = protoMethod;
     }
 
-    public void DeleteListener(string name, Action<ProtocolBase> protoMethod)
+    public void DeleteListener(string name)
     {
         if (eventDict.ContainsKey(name))
         {
-            eventDict[name] -= protoMethod;
-            if (eventDict[name] == null)
-                eventDict.Remove(name);
+            eventDict.Remove(name);
         }
     }
 

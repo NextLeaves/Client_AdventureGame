@@ -29,16 +29,22 @@ namespace Assets.Scripts.Fantasy.Networks
 {
     public class InitPlayScene : MonoBehaviour
     {
-
+        private PlayerManager _playerMgr;
         private MessageDistribution _msgDistri = MessageDistribution.GetInstance();
+
+        private void Awake()
+        {
+            _playerMgr = GetComponent<PlayerManager>();
+        }
 
         void Start()
         {
             _msgDistri.AddOnceListenner(NamesOfProtocol.ReceivePlayerData, OnReceivePlayerDataBack);
             _msgDistri.AddOnceListenner(NamesOfProtocol.SendPlayerData, OnSendPlayerDataBack);
             Networks.DataManager.GetInstance().ReadLocalFile();
+            _playerMgr.Init();
             StartCoroutine(ReceivePlayerData());
-        }
+        }        
 
         void Update()
         {

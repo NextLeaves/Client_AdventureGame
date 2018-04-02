@@ -21,7 +21,7 @@ namespace Assets.Scripts.UI.Panel
 
         private void Awake()
         {
-            _msgDistri.AddOnceListenner(NamesOfProtocol.Login, OnLoginBack);
+            _msgDistri.AddListener(NamesOfProtocol.Login, OnLoginBack);
         }
 
         public override void Init(params object[] args)
@@ -94,6 +94,7 @@ namespace Assets.Scripts.UI.Panel
                 object[] objs = new object[1];
                 objs[0] = 1;
                 PanelManager._instance.OpenPanel<LoadingPanel>("", objs);
+                _msgDistri.DeleteListener(NamesOfProtocol.Login);
             }
             else
             {

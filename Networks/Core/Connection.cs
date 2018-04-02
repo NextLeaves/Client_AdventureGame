@@ -110,7 +110,7 @@ public class Connection
         {
             _msgDistri.ProtoList.Add(proto);
             Debug.Log("add protocol:" + proto.Name);
-        }        
+        }
 
         //清除已处理消息
         int count = BufferCount - sizeof(Int32) - lenMsg;

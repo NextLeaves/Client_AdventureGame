@@ -43,7 +43,7 @@ namespace Assets.Scripts.Fantasy.Networks
             _msgDistri.AddOnceListenner(NamesOfProtocol.SendPlayerData, OnSendPlayerDataBack);
             Networks.DataManager.GetInstance().ReadLocalFile();
             _playerMgr.Init();
-            StartCoroutine(ReceivePlayerData());
+           // StartCoroutine(ReceivePlayerData());
         }        
 
         void Update()

@@ -18,6 +18,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using rand = UnityEngine.Random;
+using Assets.Scripts.Fantasy.Networks;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -38,6 +39,8 @@ public class PlayerMovement : MonoBehaviour
     private float rotateSpeed = 100.0f;
     private float RotateDampTime = 1.0f;
 
+    private PlayerManager _playerMgr;
+
     private void Awake()
     {
         nowTime = Time.time;
@@ -52,6 +55,8 @@ public class PlayerMovement : MonoBehaviour
             anim = GetComponent<Animator>();
         if (ennergy_slider == null)
             ennergy_slider = GameObject.Find("Canvas/InfoPanels/PlayerInfoPanel/energe_slider").GetComponent<Slider>();
+        if (_playerMgr == null)
+            _playerMgr = GameObject.Find("SceneManagement").GetComponent<PlayerManager>();
     }
 
     void Update()
@@ -62,8 +67,12 @@ public class PlayerMovement : MonoBehaviour
 
     void Movement()
     {
-        float v = Input.GetAxis("Vertical");
-        float h = Input.GetAxis("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        float h = Input.GetAxisRaw("Horizontal");
+
+        if (v != 0 || h != 0)
+            _playerMgr.UpdateLocation(this.transform.position);
+
         Vector3 movePos = new Vector3(0f, 0f, v);
         movePos = transform.TransformDirection(movePos);
         if (v != 0 || h != 0)

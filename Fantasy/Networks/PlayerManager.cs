@@ -119,7 +119,6 @@ namespace Assets.Scripts.Fantasy.Networks
             {
                 playersModel[id].transform.position = pos;
             }
-
             else
             {
                 CreateOtherPlayers(id, pos);

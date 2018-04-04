@@ -13,6 +13,8 @@ namespace Assets.Scripts.UI.Panel
 
         private MessageDistribution _msgDistri = MessageDistribution.GetInstance();
 
+        private bool isFindout = false;
+
         private void Awake()
         {
             _msgDistri.AddOnceListenner(NamesOfProtocol.FindPassword, OnFindPasswordBack);
@@ -61,6 +63,9 @@ namespace Assets.Scripts.UI.Panel
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }
+
+            if (!isFindout) isFindout = true;
+
             ProtocolByte proto = new ProtocolByte();
             proto.AddInfo<string>(NamesOfProtocol.FindPassword);
             proto.AddInfo<string>(acc_field.text);
@@ -70,6 +75,8 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnFindPasswordBack(ProtocolBase protocol)
         {
+            if (isFindout) isFindout = false;
+
             ProtocolByte proto = protocol as ProtocolByte;
             string num = proto.GetString(1);
             if (num == "1")

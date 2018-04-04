@@ -19,6 +19,8 @@ namespace Assets.Scripts.UI.Panel
 
         private MessageDistribution _msgDistri = MessageDistribution.GetInstance();
 
+        private bool isLogin = false;
+
         private void Awake()
         {
             _msgDistri.AddListener(NamesOfProtocol.Login, OnLoginBack);
@@ -55,6 +57,8 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnLoginClick()
         {
+            if (!isLogin) isLogin=!isLogin;
+
 #if NETWORK
             if (string.IsNullOrEmpty(acc_field.text) || string.IsNullOrEmpty(pw_field.text))
             {
@@ -63,11 +67,12 @@ namespace Assets.Scripts.UI.Panel
             }
 
             if (NetworkManager.ConnClient.status != NetworkStatus.Connected)
-            {                
+            {
                 string host = Root.IP;
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }
+
             ProtocolByte proto = new ProtocolByte();
             proto.AddInfo<string>(NamesOfProtocol.Login);
             proto.AddInfo<string>(acc_field.text);
@@ -84,6 +89,8 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnLoginBack(ProtocolBase protocol)
         {
+            if (isLogin) isLogin = !isLogin;
+
             ProtocolByte proto = protocol as ProtocolByte;
             string num = proto.GetString(1);
             if (num == "1")

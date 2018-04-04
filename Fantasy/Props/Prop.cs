@@ -36,17 +36,24 @@ namespace Assets.Scripts.Fantasy.Props
         public PropCategory _category = PropCategory.None;
         [Range(1, 10)]
         public int RewordRate = 1;
-        public int PropReword = 10;    
-        
+        public int PropReword = 10;
+
+        private float rotateSpeed = 20.0f;
+
+        private void Update()
+        {
+            RotatingSelf();
+        }
+
         public void AddScore()
         {
             switch (_category)
             {
-                case PropCategory.None:                    
-                    break;                    
+                case PropCategory.None:
+                    break;
                 case PropCategory.Coin:
                     playerData.Coin += PropReword * RewordRate;
-                    break;                    
+                    break;
                 case PropCategory.Diamand:
                     playerData.Diamand += PropReword * RewordRate;
                     break;
@@ -57,6 +64,11 @@ namespace Assets.Scripts.Fantasy.Props
                     playerData.Money += PropReword * RewordRate;
                     break;
             }
+        }
+
+        public void RotatingSelf()
+        {
+            transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
         }
     }
 }

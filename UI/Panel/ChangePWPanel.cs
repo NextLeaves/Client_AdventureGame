@@ -9,9 +9,11 @@ namespace Assets.Scripts.UI.Panel
         private Button ok_btn;
         private Button close_btn;
         private InputField acc_field;
-        private InputField newpw_field;        
+        private InputField newpw_field;
 
         private MessageDistribution _msgDistri = MessageDistribution.GetInstance();
+
+        private bool isChangePw = false;
 
         private void Awake()
         {
@@ -32,7 +34,7 @@ namespace Assets.Scripts.UI.Panel
             ok_btn = skinTrans.Find("info_panel/ok_btn").GetComponent<Button>();
             close_btn = skinTrans.Find("close_btn").GetComponent<Button>();
             acc_field = skinTrans.Find("info_panel/account_inputfield").GetComponent<InputField>();
-            newpw_field = skinTrans.Find("info_panel/password_inputfield").GetComponent<InputField>();            
+            newpw_field = skinTrans.Find("info_panel/password_inputfield").GetComponent<InputField>();
         }
 
         public override void OnShowed()
@@ -45,7 +47,7 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnFindPasswordClick()
         {
-            if (string.IsNullOrEmpty(newpw_field.text)||string.IsNullOrEmpty(acc_field.text))
+            if (string.IsNullOrEmpty(newpw_field.text) || string.IsNullOrEmpty(acc_field.text))
             {
                 Debug.Log("[Warn] input nothing.");
                 object[] obj = new object[2];
@@ -61,6 +63,9 @@ namespace Assets.Scripts.UI.Panel
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }
+
+            if (!isChangePw) isChangePw = true;
+
             ProtocolByte proto = new ProtocolByte();
             proto.AddInfo<string>(NamesOfProtocol.ChangePassword);
             proto.AddInfo<string>(acc_field.text);
@@ -70,6 +75,8 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnChangePasswordBack(ProtocolBase protocol)
         {
+            if (isChangePw) isChangePw = false;
+
             ProtocolByte proto = protocol as ProtocolByte;
             string num = proto.GetString(1);
             if (num == "1")

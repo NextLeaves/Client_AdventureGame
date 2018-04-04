@@ -14,6 +14,8 @@ namespace Assets.Scripts.UI.Panel
 
         private MessageDistribution _msgDistri = MessageDistribution.GetInstance();
 
+        private bool isRegster = false;
+
         private void Awake()
         {
             _msgDistri.AddOnceListenner(NamesOfProtocol.Register, OnRegisterBack);
@@ -73,6 +75,9 @@ namespace Assets.Scripts.UI.Panel
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }
+
+            if (!isRegster) isRegster = true;
+
             ProtocolByte proto = new ProtocolByte();
             proto.AddInfo<string>(NamesOfProtocol.Register);
             proto.AddInfo<string>(acc_field.text);
@@ -82,6 +87,8 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnRegisterBack(ProtocolBase protocol)
         {
+            if (isRegster) isRegster = false;
+
             ProtocolByte proto = protocol as ProtocolByte;
             string num = proto.GetString(1);
             string code = proto.GetString(2);

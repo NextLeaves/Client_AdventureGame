@@ -36,6 +36,10 @@ namespace Assets.Scripts.Fantasy
 
         void Update()
         {
+        }
+        
+        void LateUpdate()
+        {
             if (target == null) return;
             LookAtTarget();
             Zoom();
@@ -86,6 +90,8 @@ namespace Assets.Scripts.Fantasy
             Distance_forward = Mathf.Clamp(Distance_forward, 4.6f, 10.0f);
             Distance_up = Mathf.Clamp(Distance_up, 0.6f, 5.0f);
         }
+
+        
     }
 
 }

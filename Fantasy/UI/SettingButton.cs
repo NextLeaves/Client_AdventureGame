@@ -23,6 +23,11 @@ namespace Assets.Scripts.Fantasy.UI
     {
         public Button setting_btn;
         public GameObject settingPanel;
+        public Button changing_btn;
+        public GameObject changingPanel;
+        public Button changingMode_btn;
+        public GameObject changingModePanel;
+
 
         [Space]
         public Button info_btn;
@@ -30,6 +35,9 @@ namespace Assets.Scripts.Fantasy.UI
         public Image musicblock_img;
         public Button cmusic_btn;
         public Button quit_btn;
+        public GameObject QuitPanel;
+        public Button okQuit_btn;
+        public Button cancleQuit_btn;
 
         private AudioSource bg_audio;
 
@@ -40,18 +48,35 @@ namespace Assets.Scripts.Fantasy.UI
 
         private void Start()
         {
+            QuitPanel.SetActive(false);
+
             if (settingPanel.activeSelf) settingPanel.SetActive(!settingPanel.activeSelf);
             setting_btn.onClick.AddListener(OpenSettingPanel);
+            changing_btn.onClick.AddListener(OpenChangingMusicPanel);
+            changingMode_btn.onClick.AddListener(OpenChangingMusicModePanel);
 
             info_btn.onClick.AddListener(OpenInfoClick);
             music_btn.onClick.AddListener(OpenMusicClick);
             cmusic_btn.onClick.AddListener(OpenCMusicClick);
-            quit_btn.onClick.AddListener(QuitGame);
+            quit_btn.onClick.AddListener(QuitingGame);
+
+            
         }
 
-        void OpenSettingPanel()
+        public void OpenSettingPanel()
         {
             settingPanel.SetActive(!settingPanel.activeSelf);
+        }
+
+        public void OpenChangingMusicPanel()
+        {
+            changingPanel.SetActive(!changingPanel.activeSelf);
+            changingModePanel.SetActive(false);
+        }
+
+        public void OpenChangingMusicModePanel()
+        {
+            changingModePanel.SetActive(!changingModePanel.activeSelf);
         }
 
         void OpenInfoClick()
@@ -82,10 +107,19 @@ namespace Assets.Scripts.Fantasy.UI
 
         void OpenCMusicClick()
         {
-            
+
         }
 
-        void QuitGame()
+
+
+        void QuitingGame()
+        {
+            QuitPanel.SetActive(true);
+            okQuit_btn.onClick.AddListener(QuitedGame);
+            cancleQuit_btn.onClick.AddListener(CancleQuitedGame);
+        }
+
+        void QuitedGame()
         {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -95,6 +129,12 @@ namespace Assets.Scripts.Fantasy.UI
             Networks.DataManager.GetInstance().WriteLocalFile();
 #endif
         }
+
+        void CancleQuitedGame()
+        {
+            QuitPanel.SetActive(false);
+        }
+        
     }
 }
 

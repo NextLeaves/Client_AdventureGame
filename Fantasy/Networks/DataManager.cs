@@ -13,6 +13,11 @@ namespace Assets.Scripts.Fantasy.Networks
 
         private static DataManager _instance = new DataManager();
 
+        private DataManager()
+        {
+            playerData.AddListen(RemoteSaveData);
+        }
+
         public static DataManager GetInstance()
         {
             return _instance;
@@ -75,6 +80,27 @@ namespace Assets.Scripts.Fantasy.Networks
                 return ds;
             }
         }
-               
+
+        public void RemoteSaveData(object sender, EventArgs args)
+        {
+            ProtocolByte protoRet = new ProtocolByte();
+            protoRet.AddInfo<string>(NamesOfProtocol.SendPlayerData);
+            protoRet.AddInfo<string>(Root.Account);
+            protoRet.AddInfo<int>(this.playerData.Coin);
+            protoRet.AddInfo<int>(this.playerData.Money);
+            protoRet.AddInfo<int>(this.playerData.Star);
+            protoRet.AddInfo<int>(this.playerData.Diamand);
+
+            NetworkManager.ConnClient.Send(protoRet);
+        }
+
+        public void Logout()
+        {
+            ProtocolByte protoRet = new ProtocolByte();
+            protoRet.AddInfo<string>(NamesOfProtocol.Logout);
+            protoRet.AddInfo<string>(Root.Account);
+
+            NetworkManager.ConnClient.Send(protoRet);
+        }
     }
 }

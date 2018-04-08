@@ -50,9 +50,10 @@ namespace Assets.Scripts.Fantasy.Props
             switch (_category)
             {
                 case PropCategory.None:
+                    Debug.Log("prop type is not right.");
                     break;
                 case PropCategory.Coin:
-                    playerData.Coin += PropReword * RewordRate;
+                    playerData.Coin += PropReword * RewordRate;                    
                     break;
                 case PropCategory.Diamand:
                     playerData.Diamand += PropReword * RewordRate;
@@ -64,6 +65,7 @@ namespace Assets.Scripts.Fantasy.Props
                     playerData.Money += PropReword * RewordRate;
                     break;
             }
+            playerData.UpLoad();
         }
 
         public void RotatingSelf()

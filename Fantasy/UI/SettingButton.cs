@@ -16,6 +16,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Assets.Scripts.UI.Panel;
+using Assets.Scripts.Fantasy.Networks;
 
 namespace Assets.Scripts.Fantasy.UI
 {
@@ -41,6 +42,8 @@ namespace Assets.Scripts.Fantasy.UI
 
         private AudioSource bg_audio;
 
+        public PlayerManager playerMgr;
+
         private void Awake()
         {
             bg_audio = GameObject.Find("SceneManagement/bgManagement").GetComponent<AudioSource>();
@@ -60,7 +63,7 @@ namespace Assets.Scripts.Fantasy.UI
             cmusic_btn.onClick.AddListener(OpenCMusicClick);
             quit_btn.onClick.AddListener(QuitingGame);
 
-            
+
         }
 
         public void OpenSettingPanel()
@@ -122,11 +125,13 @@ namespace Assets.Scripts.Fantasy.UI
         void QuitedGame()
         {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-            Networks.DataManager.GetInstance().WriteLocalFile();
+            UnityEditor.EditorApplication.isPlaying = false;            
+            if (playerMgr != null)
+                playerMgr.Logout();
 #else
-            Application.Quit(); 
-            Networks.DataManager.GetInstance().WriteLocalFile();
+            Application.Quit();             
+            if (playerMgr != null)
+                playerMgr.Logout();
 #endif
         }
 
@@ -134,7 +139,7 @@ namespace Assets.Scripts.Fantasy.UI
         {
             QuitPanel.SetActive(false);
         }
-        
+
     }
 }
 

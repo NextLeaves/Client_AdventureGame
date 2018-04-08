@@ -1,6 +1,7 @@
-﻿using System;
+﻿using Assets.Scripts.UI.Panel;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace Assets.Scripts.Fantasy.Networks
 
             _msgDis.AddOnceListenner(NamesOfProtocol.SendOriginPos, OnSendOriginPosBack);
             _msgDis.AddListener(NamesOfProtocol.UpdatePosition, UpdateLocationBack);
+            _msgDis.AddOnceListenner(NamesOfProtocol.SendPlayerData, OnSendPlayerDataBack);
         }
 
         public void Init()
@@ -48,7 +50,7 @@ namespace Assets.Scripts.Fantasy.Networks
             if (NetworkManager.ConnClient.status != NetworkStatus.Connected)
             {
                 //string host = "127.0.0.1";
-                string host = "192.168.1.105";
+                string host = Root.IP;
                 int port = 1234;
                 NetworkManager.ConnClient.Connect(host, port);
             }
@@ -67,26 +69,17 @@ namespace Assets.Scripts.Fantasy.Networks
         {
             ProtocolByte proto = protocol as ProtocolByte;
             string protoName = proto.Name;
-            string number = proto.GetString(1);
 
-
-            if (number != "-1")
-            {
-                //初始化服务器中已存在的对象数据
-                string id = proto.GetString(1);
-                string x = proto.GetString(2);
-                string y = proto.GetString(3);
-                string z = proto.GetString(4);
-                float x_f = Convert.ToSingle(x);
-                float y_f = Convert.ToSingle(y);
-                float z_f = Convert.ToSingle(z);
-                Vector3 pos = new Vector3(x_f, y_f, z_f);
-                CreatePlayer(id, pos);
-            }
-            else
-            {
-                //未正确发送服务器对象数据
-            }
+            //初始化服务器中已存在的对象数据
+            string id = proto.GetString(1);
+            string x = proto.GetString(2);
+            string y = proto.GetString(3);
+            string z = proto.GetString(4);
+            float x_f = Convert.ToSingle(x);
+            float y_f = Convert.ToSingle(y);
+            float z_f = Convert.ToSingle(z);
+            Vector3 pos = new Vector3(x_f, y_f, z_f);
+            CreateOtherPlayers(id, pos);
         }
 
         public void UpdateLocation(Vector3 postion)
@@ -124,6 +117,47 @@ namespace Assets.Scripts.Fantasy.Networks
                 CreateOtherPlayers(id, pos);
             }
 
+        }
+
+        IEnumerator SendPlayerData()
+        {
+            yield return null;
+
+            if (NetworkManager.ConnClient.status != NetworkStatus.Connected)
+            {
+                //string host = "127.0.0.1";
+                string host = "192.168.1.105";
+                int port = 1234;
+                NetworkManager.ConnClient.Connect(host, port);
+            }
+            ProtocolByte proto = new ProtocolByte();
+            proto.AddInfo<string>(NamesOfProtocol.SendPlayerData);
+            proto.AddInfo<string>(Root.Account);
+            proto.AddInfo<int>(DataManager.GetInstance().playerData.Coin);
+            proto.AddInfo<int>(DataManager.GetInstance().playerData.Money);
+            proto.AddInfo<int>(DataManager.GetInstance().playerData.Star);
+            proto.AddInfo<int>(DataManager.GetInstance().playerData.Diamand);
+
+            NetworkManager.ConnClient.Send(proto);
+        }
+
+        void OnSendPlayerDataBack(ProtocolBase protocol)
+        {
+            ProtocolByte proto = protocol as ProtocolByte;
+            string num = proto.GetString(1);
+            if (num == "1")
+            {
+                Debug.Log("upload data is successful.");
+            }
+            else
+            {
+                Debug.Log("upload data is fail.");
+            }
+        }
+
+        public void Logout()
+        {
+            DataManager.GetInstance().Logout();
         }
 
     }

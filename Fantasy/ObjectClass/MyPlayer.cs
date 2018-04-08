@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
 	Project : 	
 
 	Author : NextLeaves
@@ -21,14 +22,17 @@ namespace Assets.Scripts.Fantasy.ObjectClass
     [Serializable]
     public class MyPlayer 
     {
+        public event EventHandler RemoteSendScoreEventHandle;
+
         public int Coin { get; set; }
         public int Money { get; set; }
         public int Star { get; set; }
         public int Diamand { get; set; }
 
-        public MyPlayer() : this(100, 100, 100, 100)
-        {
+        
 
+        public MyPlayer() : this(100, 100, 100, 100)
+        {            
         }
 
         public MyPlayer(int coin, int money, int star) : this(coin, money, star, 100)
@@ -51,6 +55,18 @@ namespace Assets.Scripts.Fantasy.ObjectClass
             Star = star;
             Diamand = diamand;
         }
+
+        public void AddListen(EventHandler handler)
+        {
+            RemoteSendScoreEventHandle += handler;
+        }
+
+        public void UpLoad()
+        {
+            if (RemoteSendScoreEventHandle != null)
+                RemoteSendScoreEventHandle.Invoke(this, EventArgs.Empty);
+        }
+        
 
     }
 }

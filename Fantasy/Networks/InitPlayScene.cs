@@ -39,7 +39,8 @@ namespace Assets.Scripts.Fantasy.Networks
 
         void Start()
         {
-            _msgDistri.AddOnceListenner(NamesOfProtocol.ReceivePlayerData, OnReceivePlayerDataBack);            
+            _msgDistri.AddOnceListenner(NamesOfProtocol.ReceivePlayerData, OnReceivePlayerDataBack);
+            _msgDistri.AddListener(NamesOfProtocol.Kickoff, OnKickoffBack);
             
             _playerMgr.Init();
             StartCoroutine(ReceivePlayerData());
@@ -86,6 +87,14 @@ namespace Assets.Scripts.Fantasy.Networks
                 obj[1] = "初始化数据失败，请退出，重新操作";
                 PanelManager._instance.OpenPanel<MentionPanel>("", obj);
             }
+        }
+
+        void OnKickoffBack(ProtocolBase protocol)
+        {
+            object[] obj = new object[2];
+            obj[0] = "信息提示";
+            obj[1] = "账号在其他登录，请重新登录。";
+            PanelManager._instance.OpenPanel<MentionPanel>("", obj);
         }
 
        

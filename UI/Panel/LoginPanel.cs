@@ -57,7 +57,7 @@ namespace Assets.Scripts.UI.Panel
 
         private void OnLoginClick()
         {
-            if (!isLogin) isLogin=!isLogin;
+            if (!isLogin) isLogin = !isLogin;
 
 #if NETWORK
             if (string.IsNullOrEmpty(acc_field.text) || string.IsNullOrEmpty(pw_field.text))
@@ -102,6 +102,14 @@ namespace Assets.Scripts.UI.Panel
                 objs[0] = 1;
                 PanelManager._instance.OpenPanel<LoadingPanel>("", objs);
                 _msgDistri.DeleteListener(NamesOfProtocol.Login);
+            }
+            else if (num == "-1")
+            {
+                Debug.Log("登录失败--password is error");
+                object[] obj = new object[2];
+                obj[0] = "错误提示";
+                obj[1] = "账号已登录，已踢出操作，请重新登录。";
+                PanelManager._instance.OpenPanel<MentionPanel>("", obj);
             }
             else
             {
